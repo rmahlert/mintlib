@@ -1,0 +1,10 @@
+# Enforce Unix-style line endings for scripts and text-based files
+# to ensure they work correctly in the Cygwin/MiNT build environment.
+
+* text=auto eol=lf
+
+*.sh      text eol=lf
+*.c       text eol=lf
+*.h       text eol=lf
+Makefile  text eol=lf
+*.in      text eol=lf
