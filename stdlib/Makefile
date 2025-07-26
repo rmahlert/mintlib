@@ -13,6 +13,13 @@ srcdir = .
 top_srcdir = ..
 subdir = stdlib
 
+# Add all C source files for the library here.
+# This includes the existing stdlib functions plus our new file.
+SRCS = abort.c abs.c atexit.c atoi.c atol.c atof.c bsearch.c calloc.c \
+       div.c getenv.c labs.c ldiv.c malloc.c mblen.c mbstowcs.c \
+       mbtowc.c putenv.c qsort.c rand.c realloc.c strtod.c strtol.c \
+       strtoul.c system.c wcstombs.c wctomb.c arc4random_buf.c
+
 SUBDIRS =
 
 have_check = yes
@@ -20,7 +27,7 @@ have_check = yes
 include $(top_srcdir)/configvars
 
 # Make install-libs work.
-LIBS = 
+LIBS =
 
 default: all
 
@@ -45,4 +52,3 @@ uninstall-include:
 install-man:
 
 uninstall-man:
-

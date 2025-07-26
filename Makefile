@@ -23,10 +23,10 @@ endif
 
 SUBDIRS = include syscall startup argp conf crypt dirent gmp login mintlib \
   misc multibyte posix pwdgrp shadow signal socket stdiio stdio stdlib \
-  string sysvipc termios time unix
+  string sysvipc termios time unix rand
 DIST_SUBDIRS = argp conf crypt dirent gmp include \
   login mintlib misc multibyte posix pwdgrp shadow signal socket startup \
-  stdiio stdio stdlib string sunrpc syscall sysvipc termios time tz unix
+  stdiio stdio stdlib string sunrpc syscall sysvipc termios time tz unix rand
 TEST_SUBDIRS = argp crypt dirent login mintlib misc posix pwdgrp shadow signal \
   socket startup stdiio stdio stdlib string time tz unix
 
@@ -70,59 +70,59 @@ all: all-here all-recursive
 # the rules; FIXME
 all-here: $(top_srcdir)/includepath
 	@for flavour in $(FLAVOURS); do \
-	   dir=build/$$flavour; \
-	   mkdir -p $$dir/.deps; \
-	   test -f $$dir/SRCFILES || touch $$dir/SRCFILES; \
-	   test -f $$dir/EXTRAFILES || touch $$dir/EXTRAFILES; \
-	   test -f $$dir/MISCFILES || touch $$dir/MISCFILES; \
-	   cflags=""; \
-	   nocflags=""; \
-	   qualifier=""; \
-	   cflags=""; \
-	   for f in `echo $$flavour | sed -e 's/-/ /g'`; do \
-	     case $$f in \
-	     profile) \
-	     	qualifier=_p; \
-	     	nocflags="-fomit-frame-pointer"; \
+	  dir=build/$$flavour; \
+	  mkdir -p $$dir/.deps; \
+	  test -f $$dir/SRCFILES || touch $$dir/SRCFILES; \
+	  test -f $$dir/EXTRAFILES || touch $$dir/EXTRAFILES; \
+	  test -f $$dir/MISCFILES || touch $$dir/MISCFILES; \
+	  cflags=""; \
+	  nocflags=""; \
+	  qualifier=""; \
+	  cflags=""; \
+	  for f in `echo $$flavour | sed -e 's/-/ /g'`; do \
+	    case $$f in \
+	    profile) \
+	    	qualifier=_p; \
+	    	nocflags="-fomit-frame-pointer"; \
 	        cflags="$$cflags $(CFLAGS_profile)"; \
-	     	;; \
-	     debug) \
+	    	;; \
+	    debug) \
 	        qualifier=_g; \
 	        nocflags="-O2 -O3 -fomit-frame-pointer -fexpensive-optimizations"; \
 	        cflags="$$cflags $(CFLAGS_debug)"; \
 	        ;; \
-	     m68000) \
+	    m68000) \
 	        cflags="$$cflags $(CFLAGS_m68000)"; \
 	        ;; \
-	     m68020) \
+	    m68020) \
 	        cflags="$$cflags $(CFLAGS_m68020)"; \
 	        ;; \
-	     coldfire) \
+	    coldfire) \
 	        cflags="$$cflags $(CFLAGS_coldfire)"; \
 	        ;; \
-	     short) \
+	    short) \
 	        cflags="$$cflags $(CFLAGS_short)"; \
 	        ;; \
-	     fastcall) \
+	    fastcall) \
 	        cflags="$$cflags $(CFLAGS_fastcall)"; \
 	        ;; \
-	     esac; \
-	   done; \
-	   instdir=`$(CC) $$cflags -print-multi-directory`; \
-	   test -f $$dir/BINFILES || echo "BINFILES = libc$${qualifier}.a libiio$${qualifier}.a" > $$dir/BINFILES; \
-	   ( echo "SHELL = /bin/sh"; \
-	     echo "srcdir = ."; \
-	     echo "top_srcdir = ../.."; \
-	     echo "subdir = $$dir"; \
-	     echo "qualifier = $$qualifier"; \
-	     echo "cflags = $$cflags"; \
-	     echo "nocflags = $$nocflags"; \
-	     echo "instdir = $$instdir"; \
-	     echo ""; \
-	     echo "default: all"; \
-	     echo ""; \
-	     echo 'include $$(top_srcdir)/buildrules'; \
-	   ) > $$dir/Makefile; \
+	    esac; \
+	  done; \
+	  instdir=`$(CC) $$cflags -print-multi-directory`; \
+	  test -f $$dir/BINFILES || echo "BINFILES = libc$${qualifier}.a libiio$${qualifier}.a" > $$dir/BINFILES; \
+	  ( echo "SHELL = /bin/sh"; \
+	    echo "srcdir = ."; \
+	    echo "top_srcdir = ../.."; \
+	    echo "subdir = $$dir"; \
+	    echo "qualifier = $$qualifier"; \
+	    echo "cflags = $$cflags"; \
+	    echo "nocflags = $$nocflags"; \
+	    echo "instdir = $$instdir"; \
+	    echo ""; \
+	    echo "default: all"; \
+	    echo ""; \
+	    echo 'include $$(top_srcdir)/buildrules'; \
+	  ) > $$dir/Makefile; \
 	done
 
 install: all-here install-recursive zoneswarning
@@ -161,10 +161,10 @@ $(top_srcdir)/includepath: $(top_srcdir)/configvars
 	@if [ -z "$$(<$@)" ]; then \
 	  rm $@; \
 	  echo "error: The syntax \$$(<file) is unsupported by $(SHELL)." >&2; \
-	  echo "       Please use \"$(MAKE) SHELL=/bin/bash\" instead." >&2; \
+	  echo "        Please use \"$(MAKE) SHELL=/bin/bash\" instead." >&2; \
 	  exit 1; \
 	fi
-	
+
 dist-check:
 	@echo "WARNING: This will take VERY long and will consume"
 	@echo "VERY much diskspace!!!"
@@ -237,8 +237,8 @@ uninstall-include-recursive uninstall-man-recursive:
 	@set fnord $(MAKEFLAGS); amf=$$2; \
 	echo $@ | grep -q install; \
 	if test $$? = 0 -a "${CROSS}" = yes -a "$(DESTDIR)${prefix}" = "/usr"; then \
-	   echo "attempting to install on host; aborting" >&2; \
-           exit 1; \
+	    echo "attempting to install on host; aborting" >&2; \
+                exit 1; \
 	fi; \
 	list='$(SUBDIRS)'; \
 	if test "$@" = clean-recursive; then list='$(filter-out $(LIBDIRS),$(SUBDIRS))'; fi; \
@@ -247,14 +247,14 @@ uninstall-include-recursive uninstall-man-recursive:
 	  target=`echo $@ | sed s/-recursive//`; \
 	  echo "Making $$target in $$subdir"; \
 	  (cd $$subdir && $(MAKE) $$target) \
-	   || case "$$amf" in *=*) exit 1;; *k*) fail=yes;; *) exit 1;; esac; \
+	    || case "$$amf" in *=*) exit 1;; *k*) fail=yes;; *) exit 1;; esac; \
 	done && test -z "$$fail"
 
 install-lib-recursive uninstall-lib-recursive:
 	echo $@ | grep -q install; \
 	if test $$? = 0 -a "${CROSS}" = yes -a "$(DESTDIR)${prefix}" = "/usr"; then \
-	   echo "attempting to install on host; aborting" >&2; \
-           exit 1; \
+	    echo "attempting to install on host; aborting" >&2; \
+                exit 1; \
 	fi; \
 	list='$(LIBDIRS)'; \
 	for subdir in $$list; do \
@@ -265,8 +265,8 @@ install-lib-recursive uninstall-lib-recursive:
 
 install-headers-recursive:
 	if test "${CROSS}" = yes -a "$(DESTDIR)${prefix}" = "/usr"; then \
-	   echo "attempting to install on host; aborting" >&2; \
-           exit 1; \
+	    echo "attempting to install on host; aborting" >&2; \
+                exit 1; \
 	fi; \
 	$(MAKE) -C syscall all || exit 1; \
 	list='include sunrpc'; \
@@ -282,7 +282,7 @@ dist-recursive bindist-recursive:
 	  target=`echo $@ | sed s/-recursive//`; \
 	  echo "Making $$target in $$subdir"; \
 	  (cd $$subdir && $(MAKE) $$target) \
-	   || case "$$amf" in *=*) exit 1;; *k*) fail=yes;; *) exit 1;; esac; \
+	    || case "$$amf" in *=*) exit 1;; *k*) fail=yes;; *) exit 1;; esac; \
 	done && test -z "$$fail"
 
 check-recursive checkclean-recursive:
@@ -291,27 +291,27 @@ check-recursive checkclean-recursive:
 	  target=`echo $@ | sed s/-recursive//`; \
 	  echo "Making $$target in $$subdir"; \
 	  (cd $$subdir && $(MAKE) $$target) \
-	   || case "$$amf" in *=*) exit 1;; *k*) fail=yes;; *) exit 1;; esac; \
+	    || case "$$amf" in *=*) exit 1;; *k*) fail=yes;; *) exit 1;; esac; \
 	done && test -z "$$fail"
 
 help:
 	@echo "This Makefile (and most of the Makefiles in the subdirectories)"
 	@echo "supports the following main targets:"
-	@echo 
-	@echo "     help         show this help page (toplevel Makefile only)"
-	@echo "     all          build everyting (default)"
-	@echo "     install      install everything"
-	@echo "     uninstall    uninstall all files"
-	@echo "     zonenames    list possible values for time zone"
-	@echo "	    check        build and run tests"
-	@echo 
+	@echo
+	@echo "      help          show this help page (toplevel Makefile only)"
+	@echo "      all           build everyting (default)"
+	@echo "      install       install everything"
+	@echo "      uninstall     uninstall all files"
+	@echo "      zonenames     list possible values for time zone"
+	@echo "	      check         build and run tests"
+	@echo
 	@echo "The following targets are intended for use by the"
 	@echo "maintainer:"
-	@echo 
-	@echo "     dist         make a source distribution (toplevel Makefile"
-	@echo "                  only)"
-	@echo "     bin-dist     make a binary distribution (toplevel Makefile"
-	@echo "                  only)"
+	@echo
+	@echo "      dist          make a source distribution (toplevel Makefile"
+	@echo "                    only)"
+	@echo "      bin-dist      make a binary distribution (toplevel Makefile"
+	@echo "                    only)"
 	@echo
 	@echo "Please read the file INSTALL before running make.  Edit"
 	@echo "the file configvars so that it matches the needs of "
@@ -343,4 +343,3 @@ check: check-recursive
 mintlib.spec: mintlib.spec.in configvars
 	rm -f $@
 	sed 's,@VERSION@,$(VERSION),g' $@.in >$@
-

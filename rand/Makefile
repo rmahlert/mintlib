@@ -1,5 +1,4 @@
-# time/Makefile -- MiNTLib.
-# Copyright (C) 2000 Guido Flohr <guido@freemint.de>
+# rand/Makefile -- MiNTLib.
 #
 # This file is part of the MiNTLib project, and may only be used
 # modified and distributed under the terms of the MiNTLib project
@@ -11,17 +10,14 @@ SHELL = /bin/sh
 
 srcdir = .
 top_srcdir = ..
-subdir = time
+subdir = rand
 
-# Add all C source files for the library here.
-# This includes the existing time functions plus our two new files.
-SRCS = asctime.c clock.c ctime.c difftime.c gmtime.c localtime.c \
-       mktime.c strftime.c time.c tzset.c \
-       gettimeofday.c clock_gettime.c
+# List the C source files for this directory.
+SRCS = entropy.c
 
 SUBDIRS =
 
-have_check = yes
+have_check = no
 
 include $(top_srcdir)/configvars
 
@@ -34,7 +30,8 @@ all-here:
 
 include $(top_srcdir)/rules $(top_srcdir)/phony
 
-TESTS = clock getdate posixtz strptime time
+# No tests in this directory for now.
+TESTS =
 include $(top_srcdir)/checkrules
 
 check-local:
