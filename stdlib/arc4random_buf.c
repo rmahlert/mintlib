@@ -5,6 +5,7 @@
  * This file is part of the MiNTLib project.
  */
 
+#include <stdlib.h>
 #include <stddef.h>
 
 /* Forward declaration for our low-level MiNT entropy gathering function */

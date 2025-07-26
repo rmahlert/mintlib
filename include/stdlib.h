@@ -156,6 +156,8 @@ extern char *initstate (unsigned int __seed, char *__statebuf,
    which should have been previously initialized by `initstate'.  */
 extern char *setstate (char *__statebuf) __THROW __nonnull ((1));
 
+/* Fill a buffer with cryptographically strong random bytes (BSD). */
+void arc4random_buf(void *buf, size_t nbytes);
 
 # ifdef __USE_MISC
 /* Reentrant versions of the `random' family of functions.
@@ -237,28 +239,28 @@ struct drand48_data
 
 #ifdef __USE_MISC
 /* Return non-negative, double-precision floating-point value in [0.0,1.0).  */
-extern int drand48_r (struct drand48_data *__buffer, 
+extern int drand48_r (struct drand48_data *__buffer,
                                  double *__result) __THROW;
 extern int erand48_r (unsigned short int __xsubi[3],
-			         struct drand48_data *__buffer, 
+			         struct drand48_data *__buffer,
 			         double *__result) __THROW;
 
 /* Return non-negative, long integer in [0,2^31).  */
-extern int lrand48_r (struct drand48_data *__buffer, 
+extern int lrand48_r (struct drand48_data *__buffer,
                                  long *__result) __THROW;
 extern int nrand48_r (unsigned short int __xsubi[3],
-			         struct drand48_data *__buffer, 
+			         struct drand48_data *__buffer,
 			         long *__result) __THROW;
 
 /* Return signed, long integers in [-2^31,2^31).  */
-extern int mrand48_r (struct drand48_data *__buffer, 
+extern int mrand48_r (struct drand48_data *__buffer,
                                  long *__result) __THROW;
 extern int jrand48_r (unsigned short int __xsubi[3],
-			         struct drand48_data *__buffer, 
+			         struct drand48_data *__buffer,
 			         long *__result) __THROW;
 
 /* Seed random number generator.  */
-extern int srand48_r (long __seedval, 
+extern int srand48_r (long __seedval,
                                  struct drand48_data *__buffer) __THROW;
 extern int seed48_r (unsigned short int __seed16v[3],
 			        struct drand48_data *__buffer) __THROW;
@@ -335,11 +337,11 @@ extern void _Exit (int __status) __THROW __attribute__ ((__noreturn__));
 extern char *getenv (__const char* __tag) __THROW;
 extern int system (__const char* __s) __THROW;
 
-extern void *bsearch (__const void* __key, __const void* __base, 
-                                size_t __num, size_t __size, 
+extern void *bsearch (__const void* __key, __const void* __base,
+                                size_t __num, size_t __size,
                                 __compar_fn_t __compar) __THROW;
-extern void qsort (void* __base, size_t __total_elems, 
-                             size_t __size, 
+extern void qsort (void* __base, size_t __total_elems,
+                             size_t __size,
                              __compar_fn_t __compar) __THROW;
 
 extern int abs (int __x) __THROW;

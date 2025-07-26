@@ -6,7 +6,9 @@
 
 SRCFILES = \
 	clock.c \
+	clock_gettime.c \
 	dysize.c \
 	ftime.c \
 	getdate.c \
+	gettimeofday.c \
 	strptime.c

@@ -8,6 +8,7 @@ SRCFILES = \
 	a64l.c \
 	abs.c \
 	alloca.S \
+	arc4random_buf.c \
 	atexit.c \
 	atof.c \
 	atoi.c \
